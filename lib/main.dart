@@ -9,7 +9,7 @@ void main() {
 }
 
 final foldingCellKey = GlobalKey<SimpleFoldingCellState>();
-
+final foldingCellKey1 = GlobalKey<SimpleFoldingCellState>();
 class MyApp extends StatelessWidget {
   MyApp({Key key}) : super(key: key);
 
@@ -36,8 +36,21 @@ class MyApp extends StatelessWidget {
               Container(
                 child: SimpleFoldingCell.create(
                   key: foldingCellKey,
-                  frontWidget: frontWidget(),
-                  innerWidget: innerWidget(),
+                  frontWidget: frontWidget(foldingCellKey),
+                  innerWidget: innerWidget(foldingCellKey),
+                  cellSize: Size(double.infinity, 175),
+                  padding: EdgeInsets.all(10),
+                  animationDuration: Duration(milliseconds: 300),
+                  borderRadius: 10,
+                  onOpen: () => print('cell opened'),
+                  onClose: () => print('cell closed'),
+                ),
+              ),
+              Container(
+                child: SimpleFoldingCell.create(
+                  key: foldingCellKey1,
+                  frontWidget: frontWidget(foldingCellKey1),
+                  innerWidget: innerWidget(foldingCellKey1),
                   cellSize: Size(double.infinity, 175),
                   padding: EdgeInsets.all(10),
                   animationDuration: Duration(milliseconds: 300),
@@ -54,7 +67,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-Widget innerWidget() {
+Widget innerWidget(GlobalKey<SimpleFoldingCellState> foldingCellKey) {
   return InkWell(
     onTap: () => foldingCellKey?.currentState?.toggleFold(),
     child: Container(
@@ -210,7 +223,7 @@ Widget innerWidget() {
   );
 }
 
-Widget frontWidget() {
+Widget frontWidget(GlobalKey<SimpleFoldingCellState> foldingCellKey) {
   return InkWell(
     onTap: () => foldingCellKey?.currentState?.toggleFold(),
     child: Container(
