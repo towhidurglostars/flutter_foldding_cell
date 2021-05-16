@@ -8,10 +8,14 @@ void main() {
   runApp(MyApp());
 }
 
-final foldingCellKey = GlobalKey<SimpleFoldingCellState>();
-final foldingCellKey1 = GlobalKey<SimpleFoldingCellState>();
 class MyApp extends StatelessWidget {
-  MyApp({Key key}) : super(key: key);
+  List<GlobalKey<SimpleFoldingCellState>> _list =
+      List<GlobalKey<SimpleFoldingCellState>>.empty(growable: true);
+  MyApp() {
+    for (var i = 0; i < 10; i++) {
+      _list.add(GlobalKey<SimpleFoldingCellState>());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,24 +37,11 @@ class MyApp extends StatelessWidget {
           child: ListView(
             scrollDirection: Axis.vertical,
             children: [
-              Container(
+              for (var i = 0; i < 10; i++) Container(
                 child: SimpleFoldingCell.create(
-                  key: foldingCellKey,
-                  frontWidget: frontWidget(foldingCellKey),
-                  innerWidget: innerWidget(foldingCellKey),
-                  cellSize: Size(double.infinity, 175),
-                  padding: EdgeInsets.all(10),
-                  animationDuration: Duration(milliseconds: 300),
-                  borderRadius: 10,
-                  onOpen: () => print('cell opened'),
-                  onClose: () => print('cell closed'),
-                ),
-              ),
-              Container(
-                child: SimpleFoldingCell.create(
-                  key: foldingCellKey1,
-                  frontWidget: frontWidget(foldingCellKey1),
-                  innerWidget: innerWidget(foldingCellKey1),
+                  key: _list[i],
+                  frontWidget: frontWidget(_list[i]),
+                  innerWidget: innerWidget(_list[i]),
                   cellSize: Size(double.infinity, 175),
                   padding: EdgeInsets.all(10),
                   animationDuration: Duration(milliseconds: 300),
@@ -291,74 +282,6 @@ Widget frontWidget(GlobalKey<SimpleFoldingCellState> foldingCellKey) {
           ),
         ],
       ),
-    ),
-  );
-}
-
-Widget _buildFrontWidget() {
-  return Container(
-    color: Color(0xFFffcd3c),
-    alignment: Alignment.center,
-    child: Stack(
-      children: <Widget>[
-        Align(
-          alignment: Alignment.center,
-          child: Text(
-            "CARD TITLE",
-          ),
-        ),
-        Positioned(
-          right: 10,
-          bottom: 10,
-          child: TextButton(
-            onPressed: () => foldingCellKey?.currentState?.toggleFold(),
-            child: Text(
-              "OPEN",
-            ),
-            style: TextButton.styleFrom(
-              backgroundColor: Colors.white,
-              minimumSize: Size(80, 40),
-            ),
-          ),
-        )
-      ],
-    ),
-  );
-}
-
-Widget buildInnerWidget() {
-  return Container(
-    color: Color(0xFFecf2f9),
-    padding: EdgeInsets.only(top: 10),
-    child: Stack(
-      children: [
-        Align(
-          alignment: Alignment.topCenter,
-          child: Text(
-            "CARD TITLE",
-          ),
-        ),
-        Align(
-          alignment: Alignment.center,
-          child: Text(
-            "CARD DETAIL",
-          ),
-        ),
-        Positioned(
-          right: 10,
-          bottom: 10,
-          child: TextButton(
-            onPressed: () => foldingCellKey?.currentState?.toggleFold(),
-            child: Text(
-              "Close",
-            ),
-            style: TextButton.styleFrom(
-              backgroundColor: Colors.white,
-              minimumSize: Size(80, 40),
-            ),
-          ),
-        ),
-      ],
     ),
   );
 }
